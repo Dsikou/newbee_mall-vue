@@ -1,12 +1,12 @@
 <template>
   <div id="login_Background">
-    <div class="login_logo">vei ni bruin</div>
+    <div class="login_logo">Oboro month era</div>
     <div class="login_card">
       <el-card class="box-card">
         <div class="login_form">
-          <el-input v-model="userName" placeholder="请输入内容"></el-input>
+          <el-input v-model="userName" placeholder="请输入账户"></el-input>
           <el-input placeholder="请输入密码" v-model="passWord" show-password></el-input>
-          <el-button type="primary">登录</el-button>
+          <el-button type="primary" v-on:click="login_up">登录</el-button>
         </div>
       </el-card>
     </div>
@@ -14,7 +14,7 @@
       <div class="time">{{time}}</div>
       <div class="date">{{date}}</div>
     </div>
-    <div class="login_copyright">Copyright © 2022 vei ni bruin All Rights Reserved.</div>
+    <div class="login_copyright">Copyright © 2022 Oboro month era All Rights Reserved.</div>
   </div>
 </template>
 
@@ -64,6 +64,31 @@ export default {
       }
       this.time = hours + ':' + minutes + ':' + secodes
       this.date = year + '/' + month + '/' + day
+    },
+    // login_up 方法名
+    // url 访问的路径
+    // method 访问的类型
+    // then 成功执行方法
+    // catch 失败执行方法
+    login_up: function (e) {
+      this.$axios({
+        url: 'http://localhost:8080/login',
+        method: 'post',
+        data: {
+          fdUser: this.userName,
+          fdPassWord: this.passWord
+        }
+      })
+        .then((res) => {
+          if (res.data.code === '200') {
+            this.$router.push('/index')
+          } else {
+            alert('用户名或密码错误！请重新填写正确用户名或密码')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 }
